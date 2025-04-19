@@ -12,4 +12,6 @@ public interface LocationRepository extends ListCrudRepository<Location, Integer
     Optional<Location> findByStatusAndCoordinate(String status, String coordinate);
 
     List<Location> findByStatusAndCategory_Id(String status, Integer category);
+
+    boolean existsByNameAndCategory_id(String name, Integer category);
 }

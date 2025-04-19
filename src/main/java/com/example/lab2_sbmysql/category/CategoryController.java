@@ -1,9 +1,9 @@
 package com.example.lab2_sbmysql.category;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,5 +27,11 @@ public class CategoryController {
     @GetMapping("/categories/{id}")
     public Optional<CategoryDto> getCategory(@PathVariable int id) {
         return categoryService.findById(id);
+    }
+
+    @PostMapping("/categories")
+    public ResponseEntity<Void> createCategory(@RequestBody CategoryDto categoryDto) {
+        int id = categoryService.addCategory(categoryDto);
+        return ResponseEntity.created(URI.create("/categories/" + id)).build();
     }
 }

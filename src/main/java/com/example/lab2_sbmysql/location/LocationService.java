@@ -45,7 +45,12 @@ public class LocationService {
     public int addLocation(LocationDto locationDto) {
         Category category = categoryRepository.findById(locationDto.category())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Location not found"));
+                        "Category not found"));
+
+        if(locationRepository.existsByNameAndCategory_id(locationDto.name(), category.getId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Location name already exists for category " + category.getName());
+        }
 
         Location location = new Location();
         location.setName(locationDto.name());
