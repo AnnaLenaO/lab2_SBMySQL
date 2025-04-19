@@ -24,8 +24,14 @@ public class LocationService {
                 .toList();
     }
 
-    public Optional<LocationDto> findByCoordinate(String coordinate) {
-        return locationRepository.findByCoordinateAndStatus(coordinate, "public")
+    public Optional<LocationDto> findPublicByCoordinate(String coordinate) {
+        return locationRepository.findByStatusAndCoordinate("public", coordinate)
                 .map(LocationDto::fromLocation);
+    }
+
+    public List<LocationDto> findPublicByCategory(Integer category) {
+        return locationRepository.findByStatusAndCategory_Id("public", category).stream()
+                .map(LocationDto::fromLocation)
+                .toList();
     }
 }

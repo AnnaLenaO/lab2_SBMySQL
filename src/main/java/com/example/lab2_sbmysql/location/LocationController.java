@@ -25,7 +25,12 @@ public class LocationController {
     }
 
     @GetMapping("/locations/public/{coordinate}")
-    public Optional<LocationDto> getLocation(@PathVariable String coordinate) {
-        return locationService.findByCoordinate(coordinate);
+    public Optional<LocationDto> getPublicLocationByCoordinate(@PathVariable String coordinate) {
+        return locationService.findPublicByCoordinate(coordinate);
+    }
+
+    @GetMapping("/locations/public/categories/{category}")
+    public List<LocationDto> getAllPublicLocationsByCategory(@PathVariable Integer category) {
+        return locationService.findPublicByCategory(category);
     }
 }

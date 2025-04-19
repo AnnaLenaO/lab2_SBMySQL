@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocationRepository extends ListCrudRepository<Location, Integer> {
-    Optional<Location> findByCoordinateAndStatus(String coordinate, String status);
-
     List<Location> findByStatus(String status);
+
+    Optional<Location> findByStatusAndCoordinate(String status, String coordinate);
+
+    List<Location> findByStatusAndCategory_Id(String status, Integer category);
 }
