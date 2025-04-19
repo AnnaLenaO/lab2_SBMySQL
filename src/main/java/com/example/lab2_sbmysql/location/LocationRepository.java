@@ -1,6 +1,7 @@
 package com.example.lab2_sbmysql.location;
 
 import com.example.lab2_sbmysql.location.entity.Location;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.List;
@@ -14,4 +15,9 @@ public interface LocationRepository extends ListCrudRepository<Location, Integer
     List<Location> findByStatusAndCategory_Id(String status, Integer category);
 
     boolean existsByNameAndCategory_id(String name, Integer category);
+
+    @Query("""
+SELECT l.status FROM Location l
+""")
+    List<String> findAllStatusTypes();
 }

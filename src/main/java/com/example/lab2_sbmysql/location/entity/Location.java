@@ -54,6 +54,11 @@ public class Location {
     @JoinColumn(name = "category", nullable = false)
     private Category category;
 
+    @PreUpdate
+    private void preUpdate() {
+        updatedAt = Instant.now();
+    }
+
     public Integer getId() {
         return id;
     }

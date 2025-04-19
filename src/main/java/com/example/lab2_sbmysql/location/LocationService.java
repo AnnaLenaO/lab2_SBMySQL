@@ -52,6 +52,11 @@ public class LocationService {
                     "Location name already exists for category " + category.getName());
         }
 
+        if(!locationRepository.findAllStatusTypes().contains(locationDto.status())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid Status. Status must be one of " + locationDto.status());
+        }
+
         Location location = new Location();
         location.setName(locationDto.name());
         location.setPersonId(locationDto.person_id());
@@ -60,5 +65,32 @@ public class LocationService {
         location.setCoordinate(locationDto.coordinate());
         location.setCategory(category);
         return locationRepository.save(location).getId();
+    }
+
+    public void updateLocation(Integer id, LocationDto locationDto) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Location not found"));
+
+        if (locationDto.name() != null && !locationDto.name().isEmpty()) {
+            location.setName(locationDto.name());
+        }
+        if (locationDto.status() != null && !locationDto.status().isEmpty()) {
+            if(!locationRepository.findAllStatusTypes().contains(locationDto.status())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Invalid Status. Status must be one of " + locationDto.status());
+            }
+            location.setStatus(locationDto.status());
+        }
+        if (locationDto.description() != null && !locationDto.description().isEmpty()) {
+            location.setDescription(locationDto.description());
+        }
+        if (locationDto.category() != null) {
+            Category category = categoryRepository.findById(locationDto.category())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Category not found"));
+            location.setCategory(category);
+        }
+        locationRepository.save(location);
     }
 }

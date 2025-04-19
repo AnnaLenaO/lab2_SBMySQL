@@ -41,4 +41,10 @@ public class LocationController {
         int id = locationService.addLocation(locationDto);
         return ResponseEntity.created(URI.create("/locations/" + id)).build();
     }
+
+    @PutMapping("/locations/{id}")
+    public ResponseEntity<Void> updateLocation(@PathVariable Integer id, @RequestBody LocationDto locationDto) {
+        locationService.updateLocation(id, locationDto);
+        return ResponseEntity.noContent().build();
+    }
 }
