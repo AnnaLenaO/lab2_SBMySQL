@@ -19,6 +19,11 @@ public class LocationController {
         return locationService.allLocations();
     }
 
+    @GetMapping("/locations/public")
+    public List<LocationDto> getAllLPublicLocations() {
+        return locationService.allPublicLocations();
+    }
+
     @GetMapping("/locations/public/{coordinate}")
     public Optional<LocationDto> getLocation(@PathVariable String coordinate) {
         return locationService.findByCoordinate(coordinate);

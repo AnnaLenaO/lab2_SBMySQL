@@ -18,6 +18,12 @@ public class LocationService {
                 .toList();
     }
 
+    public List<LocationDto> allPublicLocations() {
+        return locationRepository.findByStatus("public").stream()
+                .map(LocationDto::fromLocation)
+                .toList();
+    }
+
     public Optional<LocationDto> findByCoordinate(String coordinate) {
         return locationRepository.findByCoordinateAndStatus(coordinate, "public")
                 .map(LocationDto::fromLocation);
