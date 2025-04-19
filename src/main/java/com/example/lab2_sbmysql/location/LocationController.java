@@ -1,9 +1,9 @@
 package com.example.lab2_sbmysql.location;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +29,16 @@ public class LocationController {
         return locationService.findPublicByCoordinate(coordinate);
     }
 
-    @GetMapping("/locations/public/categories/{category}")
+    @GetMapping("/locations/public/category/{category}")
     public List<LocationDto> getAllPublicLocationsByCategory(@PathVariable Integer category) {
         return locationService.findPublicByCategory(category);
+    }
+
+    //GET all locations within a specific radius
+
+    @PostMapping("/locations")
+    public ResponseEntity<Void> createLocation(@RequestBody LocationDto locationDto) {
+        int id = locationService.addLocation(locationDto);
+        return ResponseEntity.created(URI.create("/locations/" + id)).build();
     }
 }
