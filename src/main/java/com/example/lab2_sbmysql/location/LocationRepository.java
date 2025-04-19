@@ -8,16 +8,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocationRepository extends ListCrudRepository<Location, Integer> {
-    List<Location> findByStatus(String status);
+    List<Location> findByDeleted(Boolean deleted);
 
-    Optional<Location> findByStatusAndCoordinate(String status, String coordinate);
+    List<Location> findByStatusAndDeleted(String status, Boolean deleted);
 
-    List<Location> findByStatusAndCategory_Id(String status, Integer category);
+    List<Location> findByStatusAndCoordinateAndDeleted(String status, String coordinate, Boolean deleted);
 
-    boolean existsByNameAndCategory_id(String name, Integer category);
+    List<Location> findByStatusAndCategory_IdAndDeleted(String status, Integer category, Boolean deleted);
+
+    boolean existsByNameAndCategory_idAndDeleted(String name, Integer category, Boolean deleted);
 
     @Query("""
 SELECT l.status FROM Location l
 """)
     List<String> findAllStatusTypes();
+
+    Optional<Location> findByIdAndDeleted(Integer id, Boolean deleted);
 }

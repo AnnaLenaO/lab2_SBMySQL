@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LocationService {
@@ -20,24 +19,25 @@ public class LocationService {
     }
 
     public List<LocationDto> allLocations() {
-        return locationRepository.findAll().stream()
+        return locationRepository.findByDeleted(false).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
     public List<LocationDto> allPublicLocations() {
-        return locationRepository.findByStatus("public").stream()
+        return locationRepository.findByStatusAndDeleted("public", false).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
 
-    public Optional<LocationDto> findPublicByCoordinate(String coordinate) {
-        return locationRepository.findByStatusAndCoordinate("public", coordinate)
-                .map(LocationDto::fromLocation);
+    public List<LocationDto> findPublicByCoordinate(String coordinate) {
+        return locationRepository.findByStatusAndCoordinateAndDeleted("public", coordinate, false).stream()
+                .map(LocationDto::fromLocation)
+                .toList();
     }
 
     public List<LocationDto> findPublicByCategory(Integer category) {
-        return locationRepository.findByStatusAndCategory_Id("public", category).stream()
+        return locationRepository.findByStatusAndCategory_IdAndDeleted("public", category, false).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
@@ -47,7 +47,7 @@ public class LocationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Category not found"));
 
-        if(locationRepository.existsByNameAndCategory_id(locationDto.name(), category.getId())) {
+        if(locationRepository.existsByNameAndCategory_idAndDeleted(locationDto.name(), category.getId(), false)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Location name already exists for category " + category.getName());
         }
@@ -68,7 +68,7 @@ public class LocationService {
     }
 
     public void updateLocation(Integer id, LocationDto locationDto) {
-        Location location = locationRepository.findById(id)
+        Location location = locationRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Location not found"));
 
@@ -91,6 +91,15 @@ public class LocationService {
                             "Category not found"));
             location.setCategory(category);
         }
+        locationRepository.save(location);
+    }
+
+    public void softDeleteLocation(Integer id) {
+        Location location = locationRepository.findByIdAndDeleted(id, false)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Location not found"));
+
+        location.setDeleted(true);
         locationRepository.save(location);
     }
 }

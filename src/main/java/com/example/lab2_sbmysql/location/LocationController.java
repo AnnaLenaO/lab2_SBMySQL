@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class LocationController {
@@ -25,7 +24,7 @@ public class LocationController {
     }
 
     @GetMapping("/locations/public/{coordinate}")
-    public Optional<LocationDto> getPublicLocationByCoordinate(@PathVariable String coordinate) {
+    public List<LocationDto> getPublicLocationByCoordinate(@PathVariable String coordinate) {
         return locationService.findPublicByCoordinate(coordinate);
     }
 
@@ -45,6 +44,12 @@ public class LocationController {
     @PutMapping("/locations/{id}")
     public ResponseEntity<Void> updateLocation(@PathVariable Integer id, @RequestBody LocationDto locationDto) {
         locationService.updateLocation(id, locationDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/locations/{id}")
+    public ResponseEntity<Void> deleteLocation(@PathVariable Integer id) {
+        locationService.softDeleteLocation(id);
         return ResponseEntity.noContent().build();
     }
 }

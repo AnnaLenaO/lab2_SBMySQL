@@ -54,6 +54,18 @@ public class Location {
     @JoinColumn(name = "category", nullable = false)
     private Category category;
 
+    @ColumnDefault("0")
+    @Column(name = "deleted", insertable = false)
+    private Boolean deleted;
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
