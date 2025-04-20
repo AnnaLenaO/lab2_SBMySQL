@@ -1,6 +1,8 @@
 package com.example.lab2_sbmysql.location;
 
 import com.example.lab2_sbmysql.location.entity.Location;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
@@ -12,7 +14,7 @@ public interface LocationRepository extends ListCrudRepository<Location, Integer
 
     List<Location> findByStatusAndDeleted(String status, Boolean deleted);
 
-    List<Location> findByStatusAndCoordinateAndDeleted(String status, String coordinate, Boolean deleted);
+    List<Location> findByStatusAndCoordinateAndDeleted(String status, Point<G2D> coordinate, Boolean deleted);
 
     List<Location> findByStatusAndCategory_IdAndDeleted(String status, Integer category, Boolean deleted);
 

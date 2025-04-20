@@ -2,6 +2,7 @@ package com.example.lab2_sbmysql.category;
 
 import com.example.lab2_sbmysql.category.entity.Category;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 

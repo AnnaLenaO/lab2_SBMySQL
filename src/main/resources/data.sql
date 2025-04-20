@@ -16,10 +16,10 @@ VALUES
 
 INSERT INTO location (name, person_id, status, description, coordinate, category)
 VALUES
-    ('Sleepy A', 'io', 'private', 'Hotel without elevator', '1234', 1),
-    ('Garden Buss', 'pb', 'public', 'Fun playground for older children', '96348', 3),
-    ('Sleepy B', 'io', 'public', 'Hotel with several elevators', '870874', 1),
-    ('Emergency Red', 'kj', 'public', 'Best hospital in town', '43546', 4),
-    ('Red eggs', 'io', 'private', 'Big eggs with chocolate', '43546', 5),
-    ('Cake', 'kj', 'public', 'Clue to big treasure', '984', 6),
-    ('Apple Pizza', 'mj', 'public', 'Serving pizza with 20 different apples', '452', 2);
+    ('Sleepy A', 'io', 'private', 'Hotel without elevator', ST_GeomFromText('POINT(63.5400 18.6901)', 4326), 1),
+    ('Garden Buss', 'pb', 'public', 'Fun playground for older children', ST_GeomFromText('POINT(62.5809 18.6900)', 4326), 3),
+    ('Sleepy B', 'io', 'public', 'Hotel with several elevators', ST_GeomFromText('POINT(63.2400 28.6923)', 4326), 1),
+    ('Emergency Red', 'kj', 'public', 'Best hospital in town', ST_GeomFromText('POINT(63.5401 13.6700)', 4326), 4),
+    ('Red eggs', 'io', 'private', 'Big eggs with chocolate', ST_GeomFromText('POINT(67.5465 15.6903)', 4326), 5),
+    ('Cake', 'kj', 'public', 'Clue to big treasure', ST_GeomFromText('POINT(61.5400 38.5454)', 4326), 6),
+    ('Apple Pizza', 'mj', 'public', 'Serving pizza with 20 different apples', ST_GeomFromText('POINT(61.5428 24.6905)', 4326), 2);

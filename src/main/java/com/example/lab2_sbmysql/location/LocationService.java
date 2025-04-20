@@ -3,11 +3,15 @@ package com.example.lab2_sbmysql.location;
 import com.example.lab2_sbmysql.category.CategoryRepository;
 import com.example.lab2_sbmysql.category.entity.Category;
 import com.example.lab2_sbmysql.location.entity.Location;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84;
 
 @Service
 public class LocationService {
@@ -30,7 +34,7 @@ public class LocationService {
                 .toList();
     }
 
-    public List<LocationDto> findPublicByCoordinate(String coordinate) {
+    public List<LocationDto> findPublicByCoordinate(Point<G2D> coordinate) {
         return locationRepository.findByStatusAndCoordinateAndDeleted("public", coordinate, false).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
@@ -57,12 +61,14 @@ public class LocationService {
                     "Invalid Status. Status must be one of " + locationDto.status());
         }
 
+        Point<G2D> geo = new Point<>(new G2D(locationDto.longitude(), locationDto.latitude()), WGS84);
+
         Location location = new Location();
         location.setName(locationDto.name());
         location.setPersonId(locationDto.person_id());
         location.setStatus(locationDto.status());
         location.setDescription(locationDto.description());
-        location.setCoordinate(locationDto.coordinate());
+        location.setCoordinate(geo);
         location.setCategory(category);
         return locationRepository.save(location).getId();
     }

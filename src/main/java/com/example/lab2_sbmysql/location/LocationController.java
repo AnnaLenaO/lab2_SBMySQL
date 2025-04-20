@@ -1,5 +1,7 @@
 package com.example.lab2_sbmysql.location;
 
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,7 @@ public class LocationController {
     }
 
     @GetMapping("/locations/public/{coordinate}")
-    public List<LocationDto> getPublicLocationByCoordinate(@PathVariable String coordinate) {
+    public List<LocationDto> getPublicLocationByCoordinate(@PathVariable Point<G2D> coordinate) {
         return locationService.findPublicByCoordinate(coordinate);
     }
 

@@ -4,6 +4,8 @@ import com.example.lab2_sbmysql.category.entity.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.Point;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -36,10 +38,9 @@ public class Location {
     @Column(name = "description")
     private String description;
 
-    @Size(max = 255)
     @NotNull
     @Column(name = "coordinate", nullable = false)
-    private String coordinate;
+    private Point<G2D> coordinate;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", updatable = false, insertable = false)
@@ -111,11 +112,11 @@ public class Location {
         this.description = description;
     }
 
-    public String getCoordinate() {
+    public Point<G2D> getCoordinate() {
         return coordinate;
     }
 
-    public void setCoordinate(String coordinate) {
+    public void setCoordinate(Point<G2D> coordinate) {
         this.coordinate = coordinate;
     }
 
