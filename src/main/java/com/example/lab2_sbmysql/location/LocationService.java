@@ -4,6 +4,7 @@ import com.example.lab2_sbmysql.category.CategoryRepository;
 import com.example.lab2_sbmysql.category.entity.Category;
 import com.example.lab2_sbmysql.location.entity.Location;
 import org.geolatte.geom.G2D;
+import org.geolatte.geom.Geometries;
 import org.geolatte.geom.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,11 @@ public class LocationService {
                 .toList();
     }
 
-    public List<LocationDto> findPublicByCoordinate(Point<G2D> coordinate) {
-        return locationRepository.findByStatusAndCoordinateAndDeleted("public", coordinate, false).stream()
+    public List<LocationDto> findPublicByCoordinate(Float latitude, Float longitude) {
+        Float swapLatitude = longitude;
+        Float swapLongitude = latitude;
+
+        return locationRepository.findByStatusAndCoordinateAndDeleted("public", swapLongitude, swapLatitude, false).stream()
                 .map(LocationDto::fromLocation)
                 .toList();
     }
@@ -107,5 +111,14 @@ public class LocationService {
 
         location.setDeleted(true);
         locationRepository.save(location);
+    }
+
+    public List<LocationDto> findAllLocationsWithinArea(Float latitude, Float longitude, Integer distance) {
+        Float swapLatitude = longitude;
+        Float swapLongitude = latitude;
+
+        return locationRepository.findWithinDistance(swapLongitude, swapLatitude, distance).stream()
+                .map(LocationDto::fromLocation)
+                .toList();
     }
 }

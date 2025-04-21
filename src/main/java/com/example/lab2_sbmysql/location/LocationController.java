@@ -1,7 +1,5 @@
 package com.example.lab2_sbmysql.location;
 
-import org.geolatte.geom.G2D;
-import org.geolatte.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,32 +23,45 @@ public class LocationController {
         return locationService.allPublicLocations();
     }
 
-    @GetMapping("/locations/public/{coordinate}")
-    public List<LocationDto> getPublicLocationByCoordinate(@PathVariable Point<G2D> coordinate) {
-        return locationService.findPublicByCoordinate(coordinate);
+    @GetMapping("/locations/public/{latitude}/{longitude}")
+    public List<LocationDto> getPublicLocationByCoordinate(
+            @PathVariable Float latitude,
+            @PathVariable Float longitude) {
+        return locationService.findPublicByCoordinate(latitude, longitude);
     }
 
     @GetMapping("/locations/public/category/{category}")
-    public List<LocationDto> getAllPublicLocationsByCategory(@PathVariable Integer category) {
+    public List<LocationDto> getAllPublicLocationsByCategory(
+            @PathVariable Integer category) {
         return locationService.findPublicByCategory(category);
     }
 
-    //GET all locations within a specific radius
+    @GetMapping("/locations/{latitude}/{longitude}/{distance}")
+    public List<LocationDto> getAllLocationsByCoordinate(
+            @PathVariable Float latitude,
+            @PathVariable Float longitude,
+            @PathVariable Integer distance) {
+        return locationService.findAllLocationsWithinArea(latitude, longitude, distance);
+    }
 
     @PostMapping("/locations")
-    public ResponseEntity<Void> createLocation(@RequestBody LocationDto locationDto) {
+    public ResponseEntity<Void> createLocation(
+            @RequestBody LocationDto locationDto) {
         int id = locationService.addLocation(locationDto);
         return ResponseEntity.created(URI.create("/locations/" + id)).build();
     }
 
     @PutMapping("/locations/{id}")
-    public ResponseEntity<Void> updateLocation(@PathVariable Integer id, @RequestBody LocationDto locationDto) {
+    public ResponseEntity<Void> updateLocation(
+            @PathVariable Integer id,
+            @RequestBody LocationDto locationDto) {
         locationService.updateLocation(id, locationDto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/locations/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteLocation(
+            @PathVariable Integer id) {
         locationService.softDeleteLocation(id);
         return ResponseEntity.noContent().build();
     }
