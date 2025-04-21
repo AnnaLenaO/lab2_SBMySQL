@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geolatte.geom.json.GeolatteGeomModule;
+import org.springframework.web.client.RestClient;
 
 @Configuration
 public class ApplicationConfig {
@@ -23,5 +24,10 @@ public class ApplicationConfig {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.registerModule(new Jdk8Module());
         return objectMapper;
+    }
+
+    @Bean
+    RestClient restClient(){
+        return RestClient.create();
     }
 }

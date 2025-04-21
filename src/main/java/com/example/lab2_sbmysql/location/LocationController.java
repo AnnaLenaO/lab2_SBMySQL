@@ -36,7 +36,7 @@ public class LocationController {
         return locationService.findPublicByCategory(category);
     }
 
-    @GetMapping("/locations/{latitude}/{longitude}/{distance}")
+    @GetMapping("/locations/public/{latitude}/{longitude}/{distance}")
     public List<LocationDto> getAllLocationsByCoordinate(
             @PathVariable Float latitude,
             @PathVariable Float longitude,
