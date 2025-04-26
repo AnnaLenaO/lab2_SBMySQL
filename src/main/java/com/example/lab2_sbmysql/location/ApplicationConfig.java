@@ -3,13 +3,17 @@ package com.example.lab2_sbmysql.location;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.geolatte.geom.json.GeolatteGeomModule;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.client.RestClient;
 
 @Configuration
+@EnableRetry
+@EnableCaching
 public class ApplicationConfig {
     @Bean
     public GeolatteGeomModule geolatteGeomModule() {

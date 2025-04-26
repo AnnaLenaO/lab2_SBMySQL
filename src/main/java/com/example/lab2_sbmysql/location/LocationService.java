@@ -4,10 +4,10 @@ import com.example.lab2_sbmysql.category.CategoryRepository;
 import com.example.lab2_sbmysql.category.entity.Category;
 import com.example.lab2_sbmysql.location.entity.Location;
 import org.geolatte.geom.G2D;
-import org.geolatte.geom.Geometries;
 import org.geolatte.geom.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -50,6 +50,7 @@ public class LocationService {
                 .toList();
     }
 
+    @Transactional
     public int addLocation(LocationDto locationDto) {
         Category category = categoryRepository.findById(locationDto.category())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -77,24 +78,33 @@ public class LocationService {
         return locationRepository.save(location).getId();
     }
 
+    @Transactional
     public void updateLocation(Integer id, LocationDto locationDto) {
         Location location = locationRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Location not found"));
 
+        if(locationRepository.existsByNameAndCategory_idAndDeleted(locationDto.name(), locationDto.category(), false)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Location name already exists for category " + locationDto.category());
+        }
+
         if (locationDto.name() != null && !locationDto.name().isEmpty()) {
             location.setName(locationDto.name());
         }
+
         if (locationDto.status() != null && !locationDto.status().isEmpty()) {
             if(!locationRepository.findAllStatusTypes().contains(locationDto.status())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Invalid Status. Status must be one of " + locationDto.status());
+                        "Invalid Status" + locationDto.status());
             }
             location.setStatus(locationDto.status());
         }
+
         if (locationDto.description() != null && !locationDto.description().isEmpty()) {
             location.setDescription(locationDto.description());
         }
+
         if (locationDto.category() != null) {
             Category category = categoryRepository.findById(locationDto.category())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -104,6 +114,7 @@ public class LocationService {
         locationRepository.save(location);
     }
 
+    @Transactional
     public void softDeleteLocation(Integer id) {
         Location location = locationRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
