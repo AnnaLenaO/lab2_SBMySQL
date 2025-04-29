@@ -55,6 +55,6 @@ public class security {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return JwtDecoders.fromIssuerLocation("");
+        return JwtDecoders.fromIssuerLocation("{location}");
     }
 }

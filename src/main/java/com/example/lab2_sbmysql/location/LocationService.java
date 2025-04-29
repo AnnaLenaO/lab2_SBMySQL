@@ -84,7 +84,7 @@ public class LocationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Location not found"));
 
-        if(locationRepository.existsByNameAndCategory_idAndDeleted(locationDto.name(), locationDto.category(), false)) {
+        if (locationRepository.existsByNameAndCategory_idAndDeleted(locationDto.name(), locationDto.category(), false)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Location name already exists for category " + locationDto.category());
         }
@@ -96,7 +96,7 @@ public class LocationService {
         if (locationDto.status() != null && !locationDto.status().isEmpty()) {
             if(!locationRepository.findAllStatusTypes().contains(locationDto.status())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Invalid Status" + locationDto.status());
+                        "Invalid Status " + locationDto.status());
             }
             location.setStatus(locationDto.status());
         }

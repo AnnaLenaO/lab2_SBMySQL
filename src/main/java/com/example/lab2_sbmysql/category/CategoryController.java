@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class CategoryController {
@@ -25,7 +24,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}")
-    public Optional<CategoryDto> getCategory(@PathVariable int id) {
+    public CategoryDto getCategory(@PathVariable int id) {
         return categoryService.findById(id);
     }
 

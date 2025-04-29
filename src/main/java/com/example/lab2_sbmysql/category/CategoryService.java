@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -22,9 +21,11 @@ public class CategoryService {
                 .toList();
     }
 
-    public Optional<CategoryDto> findById(int id) {
-        return categoryRepository.findById(id)
-                .map(CategoryDto::fromCategory);
+    public CategoryDto findById(int id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "category not found"));
+        return CategoryDto.fromCategory(category);
     }
 
     @Transactional
